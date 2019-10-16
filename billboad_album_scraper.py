@@ -10,7 +10,7 @@ class Album:
 
 # Removes all foramting from a string
 def clean_data(data):
-    temp = data.replace('\r', '').replace('\n', '').strip()
+    temp = data.replace('\r', '').replace('\n', '').replace(',', '').strip()
     return temp
 
 

@@ -70,8 +70,8 @@ def main():
         'speechiness',
         'tempo',
         'date'])
-    df.to_csv('data/complied_album_features.csv')
-    df = pd.read_csv('data/complied_album_features.csv')
+    df.to_csv('data/album_acoustic_features.csv')
+    df = pd.read_csv('data/album_acoustic_features.csv')
     mask = (df['date'] > "2008-01-01") & (df.shape[1] == 13)
     df[mask].groupby('album').agg(
         acousticness_mean=('acousticness', np.mean),
@@ -90,7 +90,7 @@ def main():
         speechiness_var=('speechiness', np.var),
         tempo_mean=('tempo', np.mean),
         tempo_var=('tempo', np.var)
-     ).to_csv('data/complied_album_features.csv')
+     ).to_csv('data/album_acoustic_features.csv')
 #    df['acousticness_mean'] = df['acousticness'].mean()
 #    df['acousticness_var'] = df['acousticness'].var()
 #    df['danceability_mean'] = df['danceability'].mean()
