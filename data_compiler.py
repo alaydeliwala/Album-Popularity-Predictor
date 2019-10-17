@@ -38,7 +38,7 @@ def main():
             match_count += 1
         
     print("Number of entries that found a match: " + str(match_count))
-    output_df.to_csv('data/full_album_data.csv')
+    output_df.to_csv('data/full_album_data.csv',index=False)
 
     
 if (__name__ == "__main__"):
