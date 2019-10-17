@@ -39,7 +39,7 @@ def get_billboard_top_200_albums(year, f):
 
 
 def main():
-    with open('data/billboard_album_data.csv', 'w', newline='') as f:
+    with open('../data/billboard_album_data.csv', 'w', newline='') as f:
         filewriter = csv.writer(f,
                                 delimiter=',',
                                 quotechar='|',
