@@ -39,13 +39,13 @@ def get_billboard_top_200_albums(year, f):
 
 
 def main():
-    with open('data/billboard_album_data-missing.csv', 'w', newline='') as f:
+    with open('data/billboard_album_data.csv', 'w', newline='') as f:
         filewriter = csv.writer(f,
                                 delimiter=',',
                                 quotechar='|',
                                 quoting=csv.QUOTE_MINIMAL)
         filewriter.writerow(['rank', 'album_name', 'artist', 'year'])
-        for x in range(2008, 2019):
+        for x in range(2009, 2019):
             get_billboard_top_200_albums(x, filewriter)
 
 
