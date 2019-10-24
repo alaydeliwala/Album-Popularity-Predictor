@@ -36,11 +36,11 @@ def main():
 
             output_df.loc[match_count] = temp_df
             match_count += 1
+
     # removes all data points that have empty values
     output_df = output_df.dropna(axis = 0, how ='any')
     output_df.to_csv('../data/full_album_data.csv',index=False)
     print("Number of entries that found a match: " + str(len(output_df.index)))
 
-    
 if (__name__ == "__main__"):
     main()
