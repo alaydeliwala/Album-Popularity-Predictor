@@ -1,9 +1,18 @@
+# This model first standardizes and normalizes the data and then
+# uses PCA to select the top XX features and then uses XX-NN to
+# determine if an album will be a hit or not
+
 import pandas as pd
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
 
-# Load the data in
+HIT_ALBUM_RANK = 25
+
+# Load the data into pandas DataFrames
 train_df = pd.read_csv('data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
@@ -22,9 +31,11 @@ test_df = pd.read_csv('data/test_data.csv',
 print('Training sample size: ', len(train_df))
 print('Testing sample size: ', len(test_df))
 
+# Divide training data and labels
 x_train = np.array(train_df.loc[:, train_df.columns[:-1]])
 y_train = np.array(train_df.loc[:, train_df.columns[-1]])
 
+# Divide testing data and labels
 x_test = np.array(test_df.loc[:, test_df.columns[:-1]])
 y_test = np.array(test_df.loc[:, test_df.columns[-1]])
 
@@ -47,10 +58,6 @@ for i in sel_pre:
         std_train = np.std(x_train, axis=0)
         z_test = (x_test - mean_train) / std_train
 
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import GaussianNB
-
 for i in sel_pre:
     if pre_dict[i] == 'Normalization':
         print('Normalization: ')
@@ -63,16 +70,16 @@ for i in sel_pre:
     clf = clf.fit(x_train, y_train)
     y_pred = clf.predict(x_test)
     for i in range(len(y_pred)):
-        if (y_pred[i] > 25):
+        if (y_pred[i] > HIT_ALBUM_RANK):
             y_pred[i] = 0
         else:
             y_pred[i] = 1
 
     for i in range(len(y_test)):
-        if (y_test[i] > 25):
+        if (y_test[i] > HIT_ALBUM_RANK):
             y_test[i] = 0
         else:
             y_test[i] = 1
     acc.append(float(sum(y_pred == y_test) / len(y_test)))
 
-    print('Max accuracy = {}'.format(max(acc)))
+    print('Accuracy = {}'.format(max(acc)))
