@@ -59,27 +59,37 @@ for i in sel_pre:
         z_test = (x_test - mean_train) / std_train
 
 for i in sel_pre:
-    if pre_dict[i] == 'Normalization':
-        print('Normalization: ')
-    elif pre_dict[i] == 'Standardization':
-        print('Standardization: ')
+    acc = {}
 
-    acc = []
-    clf = KNeighborsClassifier(n_neighbors=10)
+    for neighbors in range(16):
 
-    clf = clf.fit(x_train, y_train)
-    y_pred = clf.predict(x_test)
-    for i in range(len(y_pred)):
-        if (y_pred[i] > HIT_ALBUM_RANK):
-            y_pred[i] = 0
-        else:
-            y_pred[i] = 1
+        clf = KNeighborsClassifier(n_neighbors=(neighbors + 1))
 
-    for i in range(len(y_test)):
-        if (y_test[i] > HIT_ALBUM_RANK):
-            y_test[i] = 0
-        else:
-            y_test[i] = 1
-    acc.append(float(sum(y_pred == y_test) / len(y_test)))
+        clf = clf.fit(x_train, y_train)
+        y_pred = clf.predict(x_test)
+        for j in range(len(y_pred)):
+            if (y_pred[j] > HIT_ALBUM_RANK):
+                y_pred[j] = 0
+            else:
+                y_pred[j] = 1
 
-    print('Accuracy = {}'.format(max(acc)))
+        for j in range(len(y_test)):
+            if (y_test[j] > HIT_ALBUM_RANK):
+                y_test[j] = 0
+            else:
+                y_test[j] = 1
+        acc[str(neighbors + 1)] = float(sum(y_pred == y_test) / len(y_test))
+        plt.plot((neighbors + 1), (float(sum(y_pred == y_test) / len(y_test))),
+                 'ro')
+
+    if i == 0:
+        plt.title("K-NN Accuracy w/ Normalized Data")
+        plt.savefig('output/KNN_Accuracy_with_Normalized_data.png')
+
+    elif i == 1:
+        plt.title("K-NN Accuracy w/ Standardized Data")
+        plt.savefig('output/KNN_Accuracy_with_Standardized_data.png')
+
+    plt.clf()
+
+    # print('Accuracy = {}'.format(max(acc)))
