@@ -119,7 +119,7 @@ def perform_svm(kernel):
 
             if std_svm_accuracy == max_accuracy_linear_std:
                 param_combos_linear_std.append(param_combo)
-            elif std_svm_accuracy >= max_accuracy_linear_std:
+            elif std_svm_accuracy > max_accuracy_linear_std:
                 param_combos_linear_std = [param_combo]
                 max_accuracy_linear_std = std_svm_accuracy
 
@@ -152,7 +152,7 @@ def perform_svm(kernel):
 
                     if std_svm_accuracy == max_accuracy_poly_std:
                         param_combos_poly_std.append(param_combo)
-                    elif std_svm_accuracy >= max_accuracy_poly_std:
+                    elif std_svm_accuracy > max_accuracy_poly_std:
                         param_combos_poly_std = [param_combo]
                         max_accuracy_poly_std = std_svm_accuracy
 
@@ -184,7 +184,7 @@ def perform_svm(kernel):
 
                 if std_svm_accuracy == max_accuracy_rbf_std:
                     param_combos_rbf_std.append(param_combo)
-                elif std_svm_accuracy >= max_accuracy_rbf_std:
+                elif std_svm_accuracy > max_accuracy_rbf_std:
                     param_combos_rbf_std = [param_combo]
                     max_accuracy_rbf_std = std_svm_accuracy
 
@@ -217,7 +217,7 @@ def perform_svm(kernel):
 
                     if std_svm_accuracy == max_accuracy_sigmoid_std:
                         param_combos_sigmoid_std.append(param_combo)
-                    elif std_svm_accuracy >= max_accuracy_sigmoid_std:
+                    elif std_svm_accuracy > max_accuracy_sigmoid_std:
                         param_combos_sigmoid_std = [param_combo]
                         max_accuracy_sigmoid_std = std_svm_accuracy
 
@@ -248,17 +248,14 @@ print(param_combos_linear_std)
 print("Poly kernel: ")
 print(max_accuracy_poly_std)
 print(param_combos_poly_std)
-print("\n")
 
 print("Rbf kernel: ")
 print(max_accuracy_rbf_std)
 print(param_combos_rbf_std)
-print("\n")
 
 print("Sigmoid kernel: ")
 print(max_accuracy_sigmoid_std)
 print(param_combos_sigmoid_std)
-print("\n")
 
 # # # # # # # # #
 #               #
