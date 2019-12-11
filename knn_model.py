@@ -1,14 +1,17 @@
-# This model first standardizes and normalizes the data and then
-# uses PCA to select the top XX features and then uses XX-NN to
+# This model first standardizes the data and then
+# then uses K-NN with K ranging from
 # determine if an album will be a hit or not
-
 import pandas as pd
 import numpy as np
 from scipy import stats
+import matplotlib
+matplotlib.use('agg')
+from sklearn.metrics import precision_score
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import cross_val_score
 
 HIT_ALBUM_RANK = 25
 
@@ -39,57 +42,69 @@ y_train = np.array(train_df.loc[:, train_df.columns[-1]])
 x_test = np.array(test_df.loc[:, test_df.columns[:-1]])
 y_test = np.array(test_df.loc[:, test_df.columns[-1]])
 
-pre_dict = {0: 'Normalization', 1: 'Standardization'}
-sel_pre = [0, 1]
+# z_train is the standardized training data
+z_train = stats.zscore(x_train)
+# Use the min and max of training data to standardize testing data
+mean_train = np.mean(x_train, axis=0)
+std_train = np.std(x_train, axis=0)
+# z_test is the standardized testing data
+z_test = (x_test - mean_train) / std_train
 
-# Normalizing and Standardizing the data
-for i in sel_pre:
-    if pre_dict[i] == 'Normalization':
-        norm_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) -
-                                                        x_train.min(axis=0))
-        # Use the min and max of training data to normalize testing data
-        min_train = np.min(x_train, axis=0)
-        max_train = np.max(x_train, axis=0)
-        norm_test = (x_test - min_train) / (max_train - min_train)
-    elif pre_dict[i] == 'Standardization':
-        z_train = stats.zscore(x_train)
-        # Use the min and max of training data to standardize testing data
-        mean_train = np.mean(x_train, axis=0)
-        std_train = np.std(x_train, axis=0)
-        z_test = (x_test - mean_train) / std_train
+# Transforms the labels based on Hit Album Rank Criteria
+y_train = [1 if x <= HIT_ALBUM_RANK else 0 for x in y_train]
+y_test = [1 if x <= HIT_ALBUM_RANK else 0 for x in y_test]
 
-for i in sel_pre:
-    acc = {}
+# A dictionary of k values and accuracies
+acc = {}
+cv_acc = {}
+prec = {}
 
-    for neighbors in range(16):
+# Iterates through the diffrent K values = [1,16]
+for neighbors in range(1, 17):
+    clf = KNeighborsClassifier(n_neighbors=(neighbors))
 
-        clf = KNeighborsClassifier(n_neighbors=(neighbors + 1))
+    cv_score = cross_val_score(clf, z_train, y_train, cv=4, scoring='accuracy').mean()
+    cv_acc[str(neighbors)] = cv_score
+    plt.plot((neighbors), (cv_acc[str(neighbors)]), 'bo')
 
-        clf = clf.fit(x_train, y_train)
-        y_pred = clf.predict(x_test)
-        for j in range(len(y_pred)):
-            if (y_pred[j] > HIT_ALBUM_RANK):
-                y_pred[j] = 0
-            else:
-                y_pred[j] = 1
+    # Calculates the testing accuracy
+    clf = clf.fit(z_train, y_train)
+    y_pred = clf.predict(z_test)
+    acc[str(neighbors)] = float(sum(y_pred == y_test) / len(y_test))
+    prec[str(neighbors)] = precision_score(y_test,y_pred)
+    plt.plot((neighbors), (float(sum(y_pred == y_test) / len(y_test))), 'ro')
 
-        for j in range(len(y_test)):
-            if (y_test[j] > HIT_ALBUM_RANK):
-                y_test[j] = 0
-            else:
-                y_test[j] = 1
-        acc[str(neighbors + 1)] = float(sum(y_pred == y_test) / len(y_test))
-        plt.plot((neighbors + 1), (float(sum(y_pred == y_test) / len(y_test))),
-                 'ro')
+    # Used to see how many times the model predicts 0
+    # num_0 = 0
+    # for i in y_pred:
+    #     if i == 0:
+    #         num_0+=1
+    # print(str(neighbors) + "-NN has predicted " + str(num_0) +" entries as 0 (not a hit)")
 
-    if i == 0:
-        plt.title("K-NN Accuracy w/ Normalized Data")
-        plt.savefig('output/KNN_Accuracy_with_Normalized_data.png')
+plt.title("K-NN Accuracy w/ Standardized Data and 10-Fold CV")
+plt.axis([0,17, .7,1])
+ax = plt.gca()
+ax.set_autoscale_on(False)
+plt.ylabel("Accuracy")
+plt.xlabel("Value of K")
+plt.legend(['Training Accuracy', 'Testing Accuracy'], loc='lower right')
+plt.savefig('output/KNN_Accuracy_with_Standardized_data.png')
 
-    elif i == 1:
-        plt.title("K-NN Accuracy w/ Standardized Data")
-        plt.savefig('output/KNN_Accuracy_with_Standardized_data.png')
 
-    plt.clf()
+v = list(acc.values())
+k = list(acc.keys())
+print("The value of K that provides the highest accuracy is " +
+      k[v.index(max(v))] + " with an accuracy of " +
+      str(round(acc[str(k[v.index(max(v))])] * 100, 5)) + "%")
 
-    # print('Accuracy = {}'.format(max(acc)))
+v = list(prec.values())
+k = list(prec.keys())
+print("The value of K that provides the highest precision is " +
+      k[v.index(max(v))] + " with an accuracy of " +
+      str(round(prec[str(k[v.index(max(v))])] * 100, 5)) + "%")
+
+print()
+print("k value | train acc | test acc  | test precision")
+for test_acc in acc:
+    print("{0}       | {1}    | {2}  | {3}".format(test_acc, round(cv_acc[test_acc],5), round(acc[test_acc],5),round(prec[test_acc],5)))
+
