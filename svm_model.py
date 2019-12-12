@@ -264,5 +264,7 @@ print(param_combos_sigmoid_std)
 # # # # # # # # #
 all_accuracy_values = [max_accuracy_linear_std, max_accuracy_poly_std, max_accuracy_rbf_std, max_accuracy_sigmoid_std]
 plt.bar(kernels, all_accuracy_values)
+plt.xlabel("Accuracy")
+plt.ylabel("Kernel")
 plt.title("SVM Accuracy w/ Standardized Data")
 plt.savefig('output/SVM_Accuracy_with_Standardized_data.png')

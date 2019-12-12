@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.naive_bayes import GaussianNB
-from sklearn.naive_bayes import BernoulliNB
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score
 from scipy import stats
 
 HIT_SONG = 25
@@ -53,7 +52,14 @@ y_prediction = gnb.predict(z_test)
 y_prediction_hit =[1 if x <= HIT_SONG else 0 for x in y_prediction]
 y_test_hit = [1 if x <= HIT_SONG else 0 for x in test_df['rank']]
 
+print(y_prediction_hit)
+print(y_test_hit)
+
 accuracy = accuracy_score(y_test_hit, y_prediction_hit) * 100
 
 print("Gaussian Naive-bayes Accuracy: ", accuracy)
+
+precision = precision_score(y_test_hit, y_prediction_hit) * 100
+
+print("Gaussian Naive-bayes Precision: ", precision)
 
