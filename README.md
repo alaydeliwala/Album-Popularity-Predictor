@@ -1,7 +1,7 @@
 # Album-Popularity-Predictor
 A project for CSC 422 Automated Learning & Data Analysis at NC State.
 ## Introduction
-We hoped to be able to predict an albums popularity on the year end Billboard top charts based on various acoustic features. Our models assumed an album was popular if the rank was $\leq$ 25  or not popular if the rank  was $\gt$ 25.
+We hoped to be able to predict an albums popularity on the year end Billboard top charts based on various acoustic features. Our models assumed an album was popular if the rank was <html> &le;<html/> 25  or not popular if the rank  was <html> &gt;<html/> 25.
 
 In order to assess whether or not an album is popular, we utilized different machine learning models:
 * Naive-Bayes
