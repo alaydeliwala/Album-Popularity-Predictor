@@ -32,8 +32,7 @@ We performed a 70/30 training testing spilt and standardized the data
 |  Decision Tree Model (Gini)  |  86.5%   |
 |          SVM Model           |  85.3 %  |
 |      2-NN + 10-Fold CV       |  85.58%  |
-|     Deep Neural Network      |  85.58%  |
-|     Deep Neural Network      |          |
+|     Deep Neural Network      |  86.00%  |
 
 ## Setup
 ### Auto Installation using pip!
