@@ -6,17 +6,18 @@ import pandas as pd
 import numpy as np
 from statistics import mean
 from sklearn.metrics import accuracy_score
+import os
 
 
 # change ranks
-df = pd.read_csv('train_data.csv')
+df = pd.read_csv('../data/train_data.csv')
 
 df.loc[df['rank'] <= 25, 'rank'] = 1
 df.loc[df['rank'] > 25, 'rank'] = 0
-df.to_csv('train_data.csv')
+df.to_csv('../data/tmp_train_data.csv')
 
 
-train_df = pd.read_csv('../data/train_data.csv',
+train_df = pd.read_csv('../data/tmp_train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
@@ -65,3 +66,6 @@ print('Deep Neural Network Accuracy: ', accuracy)
 for i in range(30):
     print('%s => %d (expected %d)' %
           (x_train[i].tolist(), predictions[i], y_train[i]))
+
+# remove the temp train data
+os.system("rm ../data/tmp_train_data.csv")

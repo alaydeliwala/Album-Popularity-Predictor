@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
+import Tkinter
 
 HIT_ALBUM_RANK = 25
 PCA_NUMBER = 3
@@ -32,7 +33,7 @@ test_df = pd.read_csv('../data/test_data.csv',
 print('Training sample size: ', len(train_df))
 print('Testing sample size: ', len(test_df))
 
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
@@ -40,7 +41,7 @@ train_df = pd.read_csv('data/train_data.csv',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ],
                        nrows=int(len(train_df) / 2 + 1))
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
@@ -49,10 +50,10 @@ test_df = pd.read_csv('data/test_data.csv',
                       ],
                       nrows=int(len(train_df) / 2 + 1))
 
-train_df_1 = pd.read_csv('data/train_data.csv',
+train_df_1 = pd.read_csv('../data/train_data.csv',
                          usecols=[4, 6, 8, 10, 12, 14, 16, 18, 19],
                          skiprows=int(len(train_df) / 2))
-test_df_1 = pd.read_csv('data/test_data.csv',
+test_df_1 = pd.read_csv('../data/test_data.csv',
                         usecols=[4, 6, 8, 10, 12, 14, 16, 18, 19],
                         skiprows=int(len(train_df) / 2))
 
