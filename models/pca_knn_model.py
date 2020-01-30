@@ -14,14 +14,14 @@ HIT_ALBUM_RANK = 25
 PCA_NUMBER = 3
 
 # Load the data in
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',

@@ -7,21 +7,21 @@ from sklearn.metrics import accuracy_score
 from sklearn import tree
 
 # Reading in the datasets from the data file
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
                           'liveness_mean', 'loudness_mean', 'speechiness_mean',
                           'tempo_mean', 'rank'
                       ])
-                
+
 # Global Variable for hit_rating his is the threshold for a hit album
 hit_rating = 25
 
@@ -77,11 +77,11 @@ print('Standardized Entropy Accuracy: ', std_entropy_accuracy)
 for datapoints in range(2, 16):
     gini_std = DecisionTreeClassifier(criterion = "gini", random_state = 100,
         min_samples_split = datapoints)
-        
+
     gini_std.fit(z_train, y_train)
-    
+
     rank_pred_gini_std = gini_std.predict(z_test)
-    
+
     y_test_hit = [1 if x <= hit_rating else 0 for x in test_df['rank']]
     y_pred_gini_std_hit = [1 if x <= hit_rating else 0 for x in rank_pred_gini_std]
     sum = 0
@@ -91,7 +91,7 @@ for datapoints in range(2, 16):
     avg = sum/len(y_test_hit)
     plt.plot((datapoints), avg,
              'ro')
-             
+
 plt.title("GINI Index Accuracy w/ Standardized Data")
 plt.xlabel('Datapoints Needed to Split')
 plt.ylabel('Accuracy')
@@ -101,7 +101,7 @@ plt.clf()
 #Create the Entropy Accuracy Graph
 for datapoints in range(2, 16):
     entropy_std = DecisionTreeClassifier(criterion = "entropy", random_state = 100, min_samples_split = datapoints)
-    
+
     entropy_std.fit(z_train, y_train)
 
     rank_pred_entropy_std = entropy_std.predict(z_test)
@@ -116,7 +116,7 @@ for datapoints in range(2, 16):
     avg = sum/len(y_test_hit)
     plt.plot((datapoints), avg,
              'ro')
-    
+
 plt.title("Entropy Accuracy W/ Standardized Data")
 plt.xlabel('Datapoints Needed to Split')
 plt.ylabel('Accuracy')
@@ -126,5 +126,5 @@ plt.clf()
 
 
 
-    
+
 

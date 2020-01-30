@@ -28,14 +28,14 @@ param_combos_sigmoid_std = []
 #                                 #
 # # # # # # # # # # # # # # # # # #
 
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
@@ -106,7 +106,8 @@ def perform_svm(kernel):
 
             # Transform predicted data to 1 if hit song, 0 if not
             # y_pred_svm_norm_hit = [1 if x <= HIT_RATING else 0 for x in norm_svm_rank_pred]
-            y_pred_svm_std_hit = [1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
+            y_pred_svm_std_hit = [
+                1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
 
             # Transform test data to 1 if hit song, 0 if not
             y_test_hit = [1 if x <= HIT_RATING else 0 for x in test_df['rank']]
@@ -129,7 +130,8 @@ def perform_svm(kernel):
                 for coef0 in coef0_params:
                     # We will train 2 models; one for normalized data, and one for standardized data
                     # svm_norm = SVC(kernel=kernel, gamma='scale', C=reg, degree=degree, coef0=coef0)
-                    svm_std = SVC(kernel=kernel, gamma='scale', C=reg, degree=degree, coef0=coef0)
+                    svm_std = SVC(kernel=kernel, gamma='scale',
+                                  C=reg, degree=degree, coef0=coef0)
 
                     # svm_norm.fit(norm_train, y_train)
                     svm_std.fit(z_train, y_train)
@@ -139,16 +141,20 @@ def perform_svm(kernel):
 
                     # Transform predicted data to 1 if hit song, 0 if not
                     # y_pred_svm_norm_hit = [1 if x <= HIT_RATING else 0 for x in norm_svm_rank_pred]
-                    y_pred_svm_std_hit = [1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
+                    y_pred_svm_std_hit = [
+                        1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
 
                     # Transform test data to 1 if hit song, 0 if not
-                    y_test_hit = [1 if x <= HIT_RATING else 0 for x in test_df['rank']]
+                    y_test_hit = [
+                        1 if x <= HIT_RATING else 0 for x in test_df['rank']]
 
                     # norm_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_norm_hit) * 100
-                    std_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_std_hit)
+                    std_svm_accuracy = accuracy_score(
+                        y_test_hit, y_pred_svm_std_hit)
 
                     # Keep track of our max accuracy for for both datasets
-                    param_combo = {'kernel': kernel, 'C': reg, 'degree': degree, 'coef0': coef0}
+                    param_combo = {'kernel': kernel, 'C': reg,
+                                   'degree': degree, 'coef0': coef0}
 
                     if std_svm_accuracy == max_accuracy_poly_std:
                         param_combos_poly_std.append(param_combo)
@@ -171,13 +177,16 @@ def perform_svm(kernel):
 
                 # Transform predicted data to 1 if hit song, 0 if not
                 # y_pred_svm_norm_hit = [1 if x <= HIT_RATING else 0 for x in norm_svm_rank_pred]
-                y_pred_svm_std_hit = [1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
+                y_pred_svm_std_hit = [
+                    1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
 
                 # Transform test data to 1 if hit song, 0 if not
-                y_test_hit = [1 if x <= HIT_RATING else 0 for x in test_df['rank']]
+                y_test_hit = [
+                    1 if x <= HIT_RATING else 0 for x in test_df['rank']]
 
                 # norm_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_norm_hit) * 100
-                std_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_std_hit)
+                std_svm_accuracy = accuracy_score(
+                    y_test_hit, y_pred_svm_std_hit)
 
                 # Keep track of our max accuracy for for both datasets
                 param_combo = {'kernel': kernel, 'C': reg, 'gamma': g}
@@ -204,16 +213,20 @@ def perform_svm(kernel):
 
                     # Transform predicted data to 1 if hit song, 0 if not
                     # y_pred_svm_norm_hit = [1 if x <= HIT_RATING else 0 for x in norm_svm_rank_pred]
-                    y_pred_svm_std_hit = [1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
+                    y_pred_svm_std_hit = [
+                        1 if x <= HIT_RATING else 0 for x in std_svm_rank_pred]
 
                     # Transform test data to 1 if hit song, 0 if not
-                    y_test_hit = [1 if x <= HIT_RATING else 0 for x in test_df['rank']]
+                    y_test_hit = [
+                        1 if x <= HIT_RATING else 0 for x in test_df['rank']]
 
                     # norm_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_norm_hit) * 100
-                    std_svm_accuracy = accuracy_score(y_test_hit, y_pred_svm_std_hit)
+                    std_svm_accuracy = accuracy_score(
+                        y_test_hit, y_pred_svm_std_hit)
 
                     # Keep track of our max accuracy for for both datasets
-                    param_combo = {'kernel': kernel, 'C': reg, 'coef0': coef0, 'gamma': g}
+                    param_combo = {'kernel': kernel,
+                                   'C': reg, 'coef0': coef0, 'gamma': g}
 
                     if std_svm_accuracy == max_accuracy_sigmoid_std:
                         param_combos_sigmoid_std.append(param_combo)
@@ -262,7 +275,8 @@ print(param_combos_sigmoid_std)
 # Graph results #
 #               #
 # # # # # # # # #
-all_accuracy_values = [max_accuracy_linear_std, max_accuracy_poly_std, max_accuracy_rbf_std, max_accuracy_sigmoid_std]
+all_accuracy_values = [max_accuracy_linear_std, max_accuracy_poly_std,
+                       max_accuracy_rbf_std, max_accuracy_sigmoid_std]
 plt.bar(kernels, all_accuracy_values)
 plt.xlabel("Accuracy")
 plt.ylabel("Kernel")

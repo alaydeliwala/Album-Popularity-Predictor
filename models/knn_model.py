@@ -1,29 +1,29 @@
 # This model first standardizes the data and then
 # then uses K-NN with K ranging from
 # determine if an album will be a hit or not
+from sklearn.model_selection import cross_val_score
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+import matplotlib.pyplot as plt
+from sklearn.metrics import precision_score
 import pandas as pd
 import numpy as np
 from scipy import stats
 import matplotlib
 matplotlib.use('agg')
-from sklearn.metrics import precision_score
-import matplotlib.pyplot as plt
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.model_selection import cross_val_score
 
 HIT_ALBUM_RANK = 25
 
 # Load the data into pandas DataFrames
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
@@ -63,7 +63,8 @@ prec = {}
 for neighbors in range(1, 17):
     clf = KNeighborsClassifier(n_neighbors=(neighbors))
 
-    cv_score = cross_val_score(clf, z_train, y_train, cv=4, scoring='accuracy').mean()
+    cv_score = cross_val_score(
+        clf, z_train, y_train, cv=4, scoring='accuracy').mean()
     cv_acc[str(neighbors)] = cv_score
     plt.plot((neighbors), (cv_acc[str(neighbors)]), 'bo')
 
@@ -71,7 +72,7 @@ for neighbors in range(1, 17):
     clf = clf.fit(z_train, y_train)
     y_pred = clf.predict(z_test)
     acc[str(neighbors)] = float(sum(y_pred == y_test) / len(y_test))
-    prec[str(neighbors)] = precision_score(y_test,y_pred)
+    prec[str(neighbors)] = precision_score(y_test, y_pred)
     plt.plot((neighbors), (float(sum(y_pred == y_test) / len(y_test))), 'ro')
 
     # Used to see how many times the model predicts 0
@@ -82,7 +83,7 @@ for neighbors in range(1, 17):
     # print(str(neighbors) + "-NN has predicted " + str(num_0) +" entries as 0 (not a hit)")
 
 plt.title("K-NN Accuracy w/ Standardized Data and 10-Fold CV")
-plt.axis([0,17, .7,1])
+plt.axis([0, 17, .7, 1])
 ax = plt.gca()
 ax.set_autoscale_on(False)
 plt.ylabel("Accuracy")
@@ -106,5 +107,5 @@ print("The value of K that provides the highest precision is " +
 print()
 print("k value | train acc | test acc  | test precision")
 for test_acc in acc:
-    print("{0}       | {1}    | {2}  | {3}".format(test_acc, round(cv_acc[test_acc],5), round(acc[test_acc],5),round(prec[test_acc],5)))
-
+    print("{0}       | {1}    | {2}  | {3}".format(test_acc, round(
+        cv_acc[test_acc], 5), round(acc[test_acc], 5), round(prec[test_acc], 5)))

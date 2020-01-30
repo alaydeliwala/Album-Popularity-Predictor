@@ -6,14 +6,14 @@ from scipy import stats
 
 HIT_SONG = 25
 
-train_df = pd.read_csv('data/train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('data/test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
@@ -49,7 +49,7 @@ gnb = GaussianNB()
 gnb.fit(z_train, y_train)
 y_prediction = gnb.predict(z_test)
 
-y_prediction_hit =[1 if x <= HIT_SONG else 0 for x in y_prediction]
+y_prediction_hit = [1 if x <= HIT_SONG else 0 for x in y_prediction]
 y_test_hit = [1 if x <= HIT_SONG else 0 for x in test_df['rank']]
 
 print(y_prediction_hit)
@@ -62,4 +62,3 @@ print("Gaussian Naive-bayes Accuracy: ", accuracy)
 precision = precision_score(y_test_hit, y_prediction_hit) * 100
 
 print("Gaussian Naive-bayes Precision: ", precision)
-

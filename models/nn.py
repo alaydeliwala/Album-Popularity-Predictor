@@ -2,29 +2,28 @@
 from keras.models import Sequential
 from keras.layers import Dense
 from scipy import stats
-import pandas as pd 
+import pandas as pd
 import numpy as np
 from statistics import mean
 from sklearn.metrics import accuracy_score
 
 
-#change ranks 
+# change ranks
 df = pd.read_csv('train_data.csv')
 
-df.loc[df['rank'] <= 25 , 'rank'] = 1
-df.loc[df['rank'] > 25 , 'rank'] = 0
+df.loc[df['rank'] <= 25, 'rank'] = 1
+df.loc[df['rank'] > 25, 'rank'] = 0
 df.to_csv('train_data.csv')
 
 
-
-train_df = pd.read_csv('train_data.csv',
+train_df = pd.read_csv('../data/train_data.csv',
                        usecols=[
                            'acousticness_mean', 'danceability_mean',
                            'energy_mean', 'instrumentalness_mean',
                            'liveness_mean', 'loudness_mean',
                            'speechiness_mean', 'tempo_mean', 'rank'
                        ])
-test_df = pd.read_csv('test_data.csv',
+test_df = pd.read_csv('../data/test_data.csv',
                       usecols=[
                           'acousticness_mean', 'danceability_mean',
                           'energy_mean', 'instrumentalness_mean',
@@ -64,4 +63,5 @@ accuracy = accuracy_score(y_test_hit, y_predictions) * 100
 print('Deep Neural Network Accuracy: ', accuracy)
 
 for i in range(30):
-	print('%s => %d (expected %d)' % (x_train[i].tolist(), predictions[i], y_train[i]))
+    print('%s => %d (expected %d)' %
+          (x_train[i].tolist(), predictions[i], y_train[i]))
